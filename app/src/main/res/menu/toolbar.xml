@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/delete"
+        app:showAsAction="ifRoom"
+        android:title="删除"
+        android:icon="@drawable/delete_event"/>
+
+    <item
+        android:id="@+id/save_content"
+        app:showAsAction="ifRoom"
+        android:title="保存"
+        android:icon="@drawable/save_event"/>
+
+</menu>

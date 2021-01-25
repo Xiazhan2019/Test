@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:openxu="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.wq.purchaseinfo.Month_Calendar
+            android:id="@+id/cal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            openxu:mMonthRowL="@drawable/custom_calendar_row_left"
+            openxu:mMonthRowR="@drawable/custom_calendar_row_right"
+            openxu:mMonthRowSpac="20dip"
+
+            openxu:mTextSizeMonth="25dp"
+            openxu:mTextSizeWeek="16dp"
+            openxu:mTextSizeDay="15dp"
+            openxu:mTextSizePre="10dp"
+
+            openxu:mTextColorMonth="#4b4b4b"
+            openxu:mTextColorWeek="#9e9e9d"
+            openxu:mSelectWeekTextColor="#f67633"
+            openxu:mTextColorDay="#686768"
+            openxu:mTextColorPreFinish="#fc7451"
+            openxu:mTextColorPreUnFinish="#60ba8d"
+            openxu:mTextColorPreNull="#cecdcd"
+            openxu:mSelectTextColor="#ffffff"
+
+            openxu:mMonthSpac="10dip"
+            openxu:mLineSpac="12dip"
+            openxu:mTextSpac="8dip"
+
+            openxu:mCurrentBg="#6E6E6E"
+            openxu:mCurrentBgStrokeWidth="1.5dip"
+            openxu:mCurrentBgDashPath="@array/customCalendar_currentDay_bg_DashPath"
+            openxu:mSelectBg="#fe7f5c"
+            openxu:mSelectRadius="15dip" />
+
+        <ListView
+            android:id="@+id/data_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_below="@+id/newCalendar" >
+        </ListView>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_current"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/today_notice"
+        android:text="今天" />
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/clear_notice"
+        android:text="清空"/>
+    <Button
+        android:id="@+id/btn_all"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/all_notices"
+        android:text="所有"/>
+</RelativeLayout>

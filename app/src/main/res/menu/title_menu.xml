@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/quit"
+        android:orderInCategory="0"
+        android:title="退出"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/calendar"
+        android:orderInCategory="1"
+        android:icon="@drawable/calendar"
+        android:title="日历视图"
+        app:showAsAction="never"
+        />
+
+    <!--android:orderInCategory="1"的作用：
+        actionbar里每个item的优先级，值越大优先级越低，
+        actionbar地方不够就会放到overflow中 -->
+    <!-- order in category 中文翻译 按类别排序-->
+    <!--showAsAction的作用：将菜单显示在标题栏上，
+    其中的三个属性值
+    always：总是显示在界面上
+    never：不显示在界面上，只让出现在右边的三个点中
+    ifRoom：如果有位置才显示，不然就出现在右边的三个点中 -->
+    <item
+        android:orderInCategory="2"
+        android:id="@+id/place"
+        android:icon="@drawable/place"
+        android:title="地图视图"
+        app:showAsAction="never"
+        />
+    <item
+        android:orderInCategory="3"
+        android:id="@+id/more"
+        android:icon="@drawable/search"
+        android:title="状态查询"
+        app:showAsAction="never"
+        />
+    <item
+        android:orderInCategory="4"
+        android:id="@+id/event"
+        android:icon="@drawable/all_notices"
+        android:title="日程管理"
+        app:showAsAction="never"
+        />
+    <item
+        android:orderInCategory="5"
+        android:id="@+id/clock"
+        android:icon="@drawable/clock"
+        android:title="设置闹钟"
+        app:showAsAction="never"
+        />
+    <item
+        android:orderInCategory="6"
+        android:id="@+id/user"
+        android:icon="@drawable/user_center"
+        android:title="个人中心"
+        app:showAsAction="never"
+        />
+</menu>
