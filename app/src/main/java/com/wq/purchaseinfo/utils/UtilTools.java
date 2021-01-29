@@ -1,6 +1,7 @@
 package com.wq.purchaseinfo.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -8,6 +9,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.util.Base64;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -51,4 +54,28 @@ public class UtilTools {
 
         }
     }
+
+    //退出程序
+    public static void showdialog(Context context) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setMessage("确定要退出吗？");
+        alert.setPositiveButton("确定", click1);
+        alert.setNegativeButton("取消", click2);
+        AlertDialog alertdialog1 = alert.create();
+        alertdialog1.show();
+    }
+
+    private static DialogInterface.OnClickListener click1 = new DialogInterface.OnClickListener() {
+        //使用该标记是为了增强程序在编译时候的检查，如果该方法并不是一个覆盖父类的方法，在编译时编译器就会报告错误。
+        @Override
+        public void onClick(DialogInterface arg0, int arg1) {
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+    };
+    private static DialogInterface.OnClickListener click2 = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface arg0, int arg1) {
+            arg0.cancel();
+        }
+    };
 }

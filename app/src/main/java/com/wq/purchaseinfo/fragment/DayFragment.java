@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.wq.purchaseinfo.R;
 import com.wq.purchaseinfo.activity.NoticeActivity;
 import com.wq.purchaseinfo.entity.Notice;
-import com.wq.purchaseinfo.utils.HttpConnect;
+import com.wq.purchaseinfo.net.HttpConnect;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,7 +80,7 @@ public class DayFragment extends Fragment {
     };
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.day_frag,null);
+        View view = inflater.inflate(R.layout.frag_day,null);
 
         text = (TextView)view.findViewById(R.id.tv_date);
         listView = (ListView)view.findViewById(R.id.today_view) ;

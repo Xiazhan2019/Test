@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -21,11 +20,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
-import com.wq.purchaseinfo.MainActivity;
 import com.wq.purchaseinfo.R;
 import com.wq.purchaseinfo.entity.Notice;
 import com.wq.purchaseinfo.fragment.NoticeFragment;
-import com.wq.purchaseinfo.utils.HttpConnect;
+import com.wq.purchaseinfo.net.HttpConnect;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -40,7 +38,6 @@ import org.apache.http.util.EntityUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class NoticeActivity extends AppCompatActivity {
@@ -105,7 +102,7 @@ public class NoticeActivity extends AppCompatActivity {
            //     Log.d("保存登录信息",sp1.getString("username", null));
                 SharedPreferences sp2 = getSharedPreferences("notice", Context.MODE_PRIVATE);
            //     Log.d("保存登录信息",sp2.getString("item_title", null));
-                SendByHttpClient(sp1.getString("username", null),sp2.getString("item_title", null));
+                SendByFocus(sp1.getString("username", null),sp2.getString("item_title", null));
                 setNotficationDemo(sp1.getString("username", null),sp2.getString("item_title", null));
                 finish();
                 break;
@@ -127,36 +124,21 @@ public class NoticeActivity extends AppCompatActivity {
         return true;
     }
 //向服务器发送关注请求
-    public void SendByHttpClient(final String username, final String title){
+    public void SendByFocus(final String username, final String title){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    HttpClient httpclient=new DefaultHttpClient();
-                    HttpPost httpPost=new HttpPost("http://10.121.31.103:8080/HttpClientDemo/focus");
-                    List<NameValuePair> params=new ArrayList<NameValuePair>();
-                    params.add(new BasicNameValuePair("NAME", username));
-                    params.add(new BasicNameValuePair("TITLE", title));
-                    final UrlEncodedFormEntity entity=new UrlEncodedFormEntity(params,"utf-8");
-                    httpPost.setEntity(entity);
-                    HttpResponse httpResponse= httpclient.execute(httpPost);
-                    if(httpResponse.getStatusLine().getStatusCode()==200)
-                    {
-                        HttpEntity entity1=httpResponse.getEntity();
-                        String response= EntityUtils.toString(entity1, "utf-8");
-                        Message message=new Message();
-                        message.what=SHOW_RESPONSE;
-                        message.obj=response;
-                        handler.sendMessage(message);
-                    }
-                    else{
-                        Message message=new Message();
-                        message.what=xx12;
-                        handler.sendMessage(message);
-                    }
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
+                HttpConnect con = new HttpConnect();
+                String response = con.SendByFocus(username, title);
+                Message message = new Message();
+                if(response != null){
+                    message.obj = response;
+                    message.what = SHOW_RESPONSE;
+                    handler.sendMessage(message);
+                }else{
+                    message.obj = "";
+                    message.what = xx12;
+                    handler.sendMessage(message);
                 }
             }
         }).start();
@@ -167,26 +149,16 @@ public class NoticeActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    HttpClient httpclient=new DefaultHttpClient();
-                    HttpPost httpPost=new HttpPost("http://10.121.31.103:8080/HttpClientDemo/Cancel");
-                    List<NameValuePair> params=new ArrayList<NameValuePair>();
-                    params.add(new BasicNameValuePair("NAME", username));
-                    params.add(new BasicNameValuePair("TITLE", title));
-                    final UrlEncodedFormEntity entity=new UrlEncodedFormEntity(params,"utf-8");
-                    httpPost.setEntity(entity);
-                    HttpResponse httpResponse= httpclient.execute(httpPost);
-                    if(httpResponse.getStatusLine().getStatusCode()==200)
-                    {
-                        HttpEntity entity1=httpResponse.getEntity();
-                        String response= EntityUtils.toString(entity1, "utf-8");
-                        Message message=new Message();
-                        message.what=SHOW_RESPONSE;
-                        message.obj=response;
+                    HttpConnect con = new HttpConnect();
+                    String response = con.SendByCancel(username, title);
+                    Message message = new Message();
+                    if(!response.isEmpty()){
+                        message.obj = response;
+                        message.what = SHOW_RESPONSE;
                         handler.sendMessage(message);
-                    }
-                    else{
-                        Message message=new Message();
-                        message.what=xx12;
+                    }else{
+                        message.obj = "";
+                        message.what = xx12;
                         handler.sendMessage(message);
                     }
                 }
@@ -246,12 +218,4 @@ public class NoticeActivity extends AppCompatActivity {
 
     }
 
- /*   //按返回键退回到主界面
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-  */
 }

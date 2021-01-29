@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.wq.purchaseinfo.MainActivity;
 import com.wq.purchaseinfo.R;
 import com.wq.purchaseinfo.utils.ShareUtils;
 
@@ -146,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void run() {
                 try {
                     HttpClient httpclient=new DefaultHttpClient();
-                    HttpPost httpPost=new HttpPost("http://10.121.31.103:8080/HttpClientDemo/Login");
+                    HttpPost httpPost=new HttpPost("http://192.168.254.151:8080/HttpClientDemo/Login");
                     List<NameValuePair> params=new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("NAME",name));
                     params.add(new BasicNameValuePair("PW",pw));
@@ -162,7 +160,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         message.obj=response;
                         handler.sendMessage(message);
 
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, FirstActivity.class);
                         startActivity(intent);
                     }
                     else{

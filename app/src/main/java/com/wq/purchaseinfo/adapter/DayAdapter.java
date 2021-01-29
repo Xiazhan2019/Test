@@ -12,7 +12,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wq.purchaseinfo.WeekCalendar.DAYS_OF_WEEK;
+import static com.wq.purchaseinfo.view.WeekCalendar.DAYS_OF_WEEK;
 
 
 public class DayAdapter extends BaseAdapter {

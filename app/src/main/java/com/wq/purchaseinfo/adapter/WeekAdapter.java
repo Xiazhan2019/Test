@@ -6,12 +6,11 @@ import android.widget.BaseAdapter;
 
 import com.wq.purchaseinfo.listener.GetViewHelper;
 
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.wq.purchaseinfo.WeekCalendar.DAYS_OF_WEEK;
+import static com.wq.purchaseinfo.view.WeekCalendar.DAYS_OF_WEEK;
 
 
 public class WeekAdapter extends BaseAdapter {

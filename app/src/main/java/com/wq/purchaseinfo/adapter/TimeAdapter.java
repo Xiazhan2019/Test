@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.wq.purchaseinfo.R;
 import com.wq.purchaseinfo.entity.Clock;
 import com.wq.purchaseinfo.listener.ClockListener;
-import com.wq.purchaseinfo.utils.ClockDetail;
+import com.wq.purchaseinfo.activity.SetClockActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -79,7 +79,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Log.e("TODETAIL",clock.getClockType()+"");
-                Intent intent = new Intent(context, ClockDetail.class);
+                Intent intent = new Intent(context, SetClockActivity.class);
                 intent.putExtra("position", i);
                 context.startActivity(intent);
             }

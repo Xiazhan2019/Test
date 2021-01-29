@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,24 +19,21 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.wq.purchaseinfo.MainActivity;
 import com.wq.purchaseinfo.R;
-import com.wq.purchaseinfo.WeekCalendar;
+import com.wq.purchaseinfo.view.WeekCalendar;
 import com.wq.purchaseinfo.activity.NoticeActivity;
 import com.wq.purchaseinfo.entity.Notice;
 import com.wq.purchaseinfo.listener.DateSelectListener;
 import com.wq.purchaseinfo.listener.GetViewHelper;
 import com.wq.purchaseinfo.listener.WeekChangeListener;
 import com.wq.purchaseinfo.utils.CalendarUtil;
-import com.wq.purchaseinfo.utils.HttpConnect;
+import com.wq.purchaseinfo.net.HttpConnect;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +43,8 @@ public class WeekFragment extends Fragment {
     private TextView tvSelectDate;
     private TextView tvWeekChange;
     private GridView gridView;
-    private List<Map<String, Object>> dataList;
+    private List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();;
+    Map<String, Object> map = new HashMap<String, Object>();
     private SimpleAdapter adapter;
     private ListView listView;
     private List<Notice> filtered_itemList = new ArrayList<Notice>();
@@ -94,13 +91,27 @@ public class WeekFragment extends Fragment {
                     listView.setAdapter(null);
                     Toast.makeText(getActivity(), (String) msg.obj, Toast.LENGTH_LONG).show();
                     break;
+                case 0x13:
+//                    dataList.add((Map<String, Object>) msg.obj);
+//                    String[] from={"text","text"};
+//                    int[] to={R.id.text, R.id.text};
+//                    adapter=new SimpleAdapter(getActivity(), dataList, R.layout.gridview_item, from, to);
+//                    gridView.setAdapter(adapter);
+//                    gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+//                            AlertDialog.Builder builder= new AlertDialog.Builder(getActivity());
+//                            builder.setTitle("提示").setMessage(dataList.get(arg2).get("text").toString()).create().show();
+//                        }
+//                    });
+                    break;
             }
 
         }
     };
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.week_frag, null);
+        View view = inflater.inflate(R.layout.frag_week, null);
         findView(view);
         return view;
     }
@@ -111,19 +122,19 @@ public class WeekFragment extends Fragment {
         currentFirstDay = (TextView)view.findViewById(R.id.tv_current_firstday);
         eventDates = new ArrayList<>();
         gridView = (GridView) view.findViewById(R.id.grid_view);
-        //初始化数据
-        initData();
-        String[] from={"text","text"};
-        int[] to={R.id.text,R.id.text};
-        adapter=new SimpleAdapter(getActivity(), dataList, R.layout.gridview_item, from, to);
-        gridView.setAdapter(adapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                AlertDialog.Builder builder= new AlertDialog.Builder(getActivity());
-                builder.setTitle("提示").setMessage(dataList.get(arg2).get("text").toString()).create().show();
-            }
-        });
+//        //初始化数据
+//        initData();
+//        String[] from={"text","text"};
+//        int[] to={R.id.text,R.id.text};
+//        adapter=new SimpleAdapter(getActivity(), dataList, R.layout.gridview_item, from, to);
+//        gridView.setAdapter(adapter);
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+//                AlertDialog.Builder builder= new AlertDialog.Builder(getActivity());
+//                builder.setTitle("提示").setMessage(dataList.get(arg2).get("text").toString()).create().show();
+//            }
+//        });
 
         weekCalendar = (WeekCalendar) view.findViewById(R.id.week_calendar);
         weekCalendar.setGetViewHelper(new GetViewHelper() {
@@ -222,31 +233,35 @@ public class WeekFragment extends Fragment {
                 String text = "本周第一天:" + firstDayOfWeek.toString("yyyy年M月d日")
                         + ",本周最后一天:" + new DateTime(firstDayOfWeek).plusDays(6).toString("yyyy年M月d日");
                 tvWeekChange.setText(text);
+//                dataList.clear();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        HttpConnect con = new HttpConnect();
+//                        Log.e("测试==", ""+weekCalendar.getCurrentFirstDay().toString("yyyy-MM-dd"));
+//                        List<DayNum> dayNumList = con.count(weekCalendar.getCurrentFirstDay().toString("yyyy-MM-dd"));
+//                        for(int i = 0; i < 7; i++){
+//                            map.put("text", dayNumList.get(i).getCount());
+//                            dataList.add(map);
+//                        }
+//                        Message message = handler.obtainMessage();
+//                        message.what = 0x13;
+//                        message.obj = dataList;
+//                        handler.sendMessage(message);
+//                    }
+//                }).start();
             }
         });
     }
 
-    void initData() {
-        //日期下的文字
-        String name[]={"0","0","0","0","0","0","0"};
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                /*
-                Filter_item_Dao filter = new Filter_item_Dao();
-                List<Filtered_item> weeklist = filter.findWeek();
-                Log.d("", "2019-08 " + weeklist);
-
-                 */
-            }
-        }).start();
-        dataList = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i <name.length; i++) {
-            Map<String, Object> map=new HashMap<String, Object>();
-            map.put("img", name[i]);
-            map.put("text",name[i]);
-            dataList.add(map);
-        }
-    }
+//    void initData() {
+//        //日期下的文字
+//        String name[]={"0","0","0","0","0","0","0"};
+//        for (int i = 0; i <name.length; i++) {
+//            map.put("text",name[i]);
+//            dataList.add(map);
+//        }
+//        map.clear();
+//    }
 }
 

@@ -2,7 +2,6 @@ package com.wq.purchaseinfo.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,14 +21,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.wq.purchaseinfo.R;
 import com.wq.purchaseinfo.entity.Notice;
-import com.wq.purchaseinfo.utils.HttpConnect;
+import com.wq.purchaseinfo.net.HttpConnect;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FocusActivity extends AppCompatActivity {
+public class FocusActivity extends BaseActivity {
     private ListView listView;
     private List<Notice> itemList = new ArrayList<>();
     @SuppressLint("HandlerLeak")
@@ -53,11 +52,11 @@ public class FocusActivity extends AppCompatActivity {
                             String content;
                             if(itemList != null && !itemList.isEmpty()){
                                 //点击标题显示内容
-                                for(int i =0;i<itemList.size();i++){
+                                for(int i = 0; i < itemList.size(); i++){
                                     String element = itemList.get(i).getTitle();
                                     if(element == text){
                                         content = itemList.get(i).getContent();
-                                        NoticeActivity.actionStart(FocusActivity.this,text,content);
+                                        NoticeActivity.actionStart(FocusActivity.this, text, content);
                                     }
                                 }
                             }else {
@@ -93,12 +92,12 @@ public class FocusActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Message message = handler.obtainMessage();
+                List<HashMap<String, Object>> data = new ArrayList<>();
                 //获取用户姓名
                 SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
                 HttpConnect con = new HttpConnect();
                 itemList = con.SendFocus(sp.getString("username",null));
                 if (itemList != null) {
-                    List<HashMap<String, Object>> data = new ArrayList<>();
                     for (Notice item : itemList) {
                         HashMap<String, Object> it = new HashMap<String, Object>();
                         it.put("title", item.getTitle());
@@ -111,27 +110,8 @@ public class FocusActivity extends AppCompatActivity {
                     message.what = 0x12;
                     message.obj = "查询结果为空";
                 }
-                // 发消息通知主线程更新UI
                 handler.sendMessage(message);
             }
         }).start();
     }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home://一定添加android还有下面这行代码
-                onBackPressed();
-                finish();
-                return true;
-            default:
-        }
-        return true;
-    }
-    /*   //按返回键退回到用户界面
-    public void onBackPressed() {
-        Intent intent = new Intent(FocusActivity.this, UserActivity.class);
-        startActivity(intent);
-        finish();
-    }*/
 }

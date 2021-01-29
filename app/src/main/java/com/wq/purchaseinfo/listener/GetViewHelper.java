@@ -9,7 +9,6 @@ import org.joda.time.DateTime;
 public interface GetViewHelper {
 
     View getDayView(int position, View convertView, ViewGroup parent, DateTime dateTime, boolean select);
-
     View getWeekView(int position, View convertView, ViewGroup parent, String week);
 
 }
