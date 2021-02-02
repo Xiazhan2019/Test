@@ -1,5 +1,6 @@
 package com.wq.purchaseinfo.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -43,16 +45,16 @@ import java.util.List;
 public class NoticeActivity extends AppCompatActivity {
 
     public static final int SHOW_RESPONSE=1;
-    public static final int xx12 = 0;
+    public static final int FILED = 0;
     private Handler handler=new Handler() {
         public void handleMessage(Message msg)
         {
             switch (msg.what){
                 case SHOW_RESPONSE:
-                    String response=(String)msg.obj;
+                    String response = (String)msg.obj;
                     Toast.makeText(NoticeActivity.this, response, Toast.LENGTH_SHORT).show();
                     break;
-                case xx12:
+                case FILED:
                     Toast.makeText(NoticeActivity.this, "关注失败", Toast.LENGTH_SHORT).show();
                 default:
                     break;
@@ -60,12 +62,44 @@ public class NoticeActivity extends AppCompatActivity {
         }
     };
 
+    private long startTime = 0L;
+    private long endTime = 0L;
+    private long runTime = 0L;
+
 
     public static  void actionStart(Context context, String filterTitle, String filterContent){
         Intent intent = new Intent(context, NoticeActivity.class);
         intent.putExtra("filters_title", filterTitle);
         intent.putExtra("filters_content", filterContent);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        Log.e("wq==", "onResume()");
+        super.onResume();
+        startTime = System.currentTimeMillis();
+    }
+    @SuppressLint("ResourceType")
+    @Override
+    protected void onStop() {
+        Log.e("wq==", "onStop()");
+        super.onStop();
+        endTime = System.currentTimeMillis();
+        runTime = endTime - startTime;
+        Log.e("wq==","运行时间" + runTime);
+        if(runTime > 2500){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences sp1 = getSharedPreferences("login", Context.MODE_PRIVATE);
+                    String filtersTitle = getIntent().getStringExtra("filters_title");
+                    Log.e("wq==","文本题目："+filtersTitle);
+                    HttpConnect con = new HttpConnect();
+                    con.BrowseInfo(sp1.getString("username", null), filtersTitle, runTime);
+                }
+            }).start();
+        }
     }
 
     @Override
@@ -77,8 +111,8 @@ public class NoticeActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        String filtersTitle = getIntent().getStringExtra("filters_title");//获取出传入的新闻标题
-        String filtersContent = getIntent().getStringExtra("filters_content");//获取出传入的新闻内容
+        String filtersTitle = getIntent().getStringExtra("filters_title");//获取传入的新闻标题
+        String filtersContent = getIntent().getStringExtra("filters_content");//获取传入的新闻内容
         SharedPreferences sp = getSharedPreferences("notice", Context.MODE_PRIVATE);
         sp.edit().putString("item_title", filtersTitle)
                 .apply();
@@ -97,25 +131,22 @@ public class NoticeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.save_content:
-              //关注招标按钮，保存关联的用户名和招标信息名
+              //关注按钮，保存关联的用户名和招标信息名
                 SharedPreferences sp1 = getSharedPreferences("login", Context.MODE_PRIVATE);
-           //     Log.d("保存登录信息",sp1.getString("username", null));
                 SharedPreferences sp2 = getSharedPreferences("notice", Context.MODE_PRIVATE);
-           //     Log.d("保存登录信息",sp2.getString("item_title", null));
                 SendByFocus(sp1.getString("username", null),sp2.getString("item_title", null));
                 setNotficationDemo(sp1.getString("username", null),sp2.getString("item_title", null));
                 finish();
                 break;
 
             case R.id.delete:
-             //取消招标按钮，删除关联的用户名和招标信息名
                 SharedPreferences sp3 = getSharedPreferences("login", Context.MODE_PRIVATE);
                 SharedPreferences sp4 = getSharedPreferences("notice", Context.MODE_PRIVATE);
                 SendByCancel(sp3.getString("username", null),sp4.getString("item_title", null));
                 finish();
                 break;
 
-            case android.R.id.home://一定添加android还有下面这行代码
+            case android.R.id.home:
                 onBackPressed();
                 finish();
                 return true;
@@ -134,12 +165,11 @@ public class NoticeActivity extends AppCompatActivity {
                 if(response != null){
                     message.obj = response;
                     message.what = SHOW_RESPONSE;
-                    handler.sendMessage(message);
                 }else{
                     message.obj = "";
-                    message.what = xx12;
-                    handler.sendMessage(message);
+                    message.what = FILED;
                 }
+                handler.sendMessage(message);
             }
         }).start();
     }
@@ -155,12 +185,11 @@ public class NoticeActivity extends AppCompatActivity {
                     if(!response.isEmpty()){
                         message.obj = response;
                         message.what = SHOW_RESPONSE;
-                        handler.sendMessage(message);
                     }else{
                         message.obj = "";
-                        message.what = xx12;
-                        handler.sendMessage(message);
+                        message.what = FILED;
                     }
+                    handler.sendMessage(message);
                 }
                 catch (Exception e) {
                     e.printStackTrace();

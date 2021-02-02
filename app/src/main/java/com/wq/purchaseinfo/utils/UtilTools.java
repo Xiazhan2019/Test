@@ -61,8 +61,8 @@ public class UtilTools {
         alert.setMessage("确定要退出吗？");
         alert.setPositiveButton("确定", click1);
         alert.setNegativeButton("取消", click2);
-        AlertDialog alertdialog1 = alert.create();
-        alertdialog1.show();
+        AlertDialog alertdialog = alert.create();
+        alertdialog.show();
     }
 
     private static DialogInterface.OnClickListener click1 = new DialogInterface.OnClickListener() {

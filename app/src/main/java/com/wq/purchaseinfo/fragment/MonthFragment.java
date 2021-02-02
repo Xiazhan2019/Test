@@ -24,7 +24,6 @@ import com.wq.purchaseinfo.entity.DayNum;
 import com.wq.purchaseinfo.view.Month_Calendar;
 import com.wq.purchaseinfo.activity.CalendarActivity;
 import com.wq.purchaseinfo.R;
-import com.wq.purchaseinfo.activity.All_itemsActivity;
 import com.wq.purchaseinfo.activity.NoticeActivity;
 import com.wq.purchaseinfo.entity.Notice;
 import com.wq.purchaseinfo.net.HttpConnect;

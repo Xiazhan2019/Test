@@ -1,11 +1,12 @@
 package com.wq.purchaseinfo.utils;
 
 
+import android.app.Application;
+
 import com.baidu.mapapi.SDKInitializer;
 
-import org.litepal.LitePalApplication;
 
-public class BDApplication extends LitePalApplication {
+public class BDApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();

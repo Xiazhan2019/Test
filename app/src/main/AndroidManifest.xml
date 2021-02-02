@@ -65,7 +65,7 @@
             android:launchMode="singleTask">
         </activity>
 
-        <activity android:name=".activity.All_itemsActivity"/>
+<!--        <activity android:name=".activity.All_itemsActivity"/>-->
         <activity android:name=".activity.NoticeActivity"/>
         <activity android:name=".activity.PlaceActivity"/>
         <activity android:name=".activity.SearchActivity" />

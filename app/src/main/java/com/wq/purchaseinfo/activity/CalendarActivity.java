@@ -106,9 +106,4 @@ public class CalendarActivity extends BaseActivity {
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        CalendarActivity.this.finish();
-//    }
 }
